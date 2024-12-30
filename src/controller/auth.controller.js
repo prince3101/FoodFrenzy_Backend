@@ -1,4 +1,5 @@
 const { generateToken } = require("../helper/genrateToken");
+const { sendMail } = require("../helper/sendEmail");
 const user = require("../model/user");
 
 const SignUp = async (req, res) => {
@@ -11,10 +12,20 @@ const SignUp = async (req, res) => {
     }
 
     const bodyData = await user.create(body);
+    await sendMail({
+      email: body?.email,
+      subject: "login details",
+      html: `your email is ${body?.email} <br/> your password is ${body?.password}`,
+    });
     return res.status(200).send({ message: "user register successfully!!!", payload: bodyData });
   } catch (error) {
     return res.status(500).send({ message: "something went wrong !!" });
   }
+};
+
+const getUserData = async (req, res) => {
+  const bodyData = await user.find({});
+  return res.status(200).send({ message: "category retrived successfully!!!", payload: bodyData });
 };
 
 const LoginUser = async (req, res) => {
@@ -46,7 +57,21 @@ const LoginUser = async (req, res) => {
   }
 };
 
+const userDelete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const bodyData = await user.deleteOne({ _id: id });
+    return res
+      .status(200)
+      .send({ message: "inventory retrived successfully!!!", payload: bodyData });
+  } catch (error) {
+    return res.status(500).send({ message: "something went wrong!!!" });
+  }
+};
+
 module.exports = {
   SignUp,
   LoginUser,
+  getUserData,
+  userDelete
 };

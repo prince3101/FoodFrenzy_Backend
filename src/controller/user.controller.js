@@ -12,17 +12,25 @@ const GenerateBill = async (req, res) => {
     const bodyData = await bill.create(body);
     return res.status(200).send({ message: "user register successfully!!!", payload: bodyData });
   } catch (error) {
-    console.log(error, "error++")
+    console.log(error, "error++");
     return res.status(500).send({ message: "something went wrong !!" });
   }
 };
 
 const getBills = async (req, res) => {
-    const bodyData = await bill.find({});
-    return res.status(200).send({ message: "bill retrived successfully!!!", payload: bodyData });
-  };
+  const bodyData = await bill.find({});
+  return res.status(200).send({ message: "bill retrived successfully!!!", payload: bodyData });
+};
+
+const updateBill = async (req, res) => {
+  const status = req.body?.status;
+  const updateId = req.params?.id;
+  const bodyData = await bill.updateOne({ _id: updateId }, { payment_status: status });
+  return res.status(200).send({ message: "bill updated successfully!!!", payload: bodyData });
+};
 
 module.exports = {
-    GenerateBill,
-    getBills
+  GenerateBill,
+  getBills,
+  updateBill
 };

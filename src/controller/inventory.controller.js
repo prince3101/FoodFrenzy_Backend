@@ -14,7 +14,7 @@ const addInventory = async (req, res) => {
 
 const getInventory = async (req, res) => {
   try {
-    const bodyData = await inventory.find({});
+    const bodyData = await inventory.find({}).populate("category_id");
     return res
       .status(200)
       .send({ message: "inventory retrived successfully!!!", payload: bodyData });
@@ -22,6 +22,11 @@ const getInventory = async (req, res) => {
     return res.status(500).send({ message: "something went wrong!!!" });
   }
 };
+
+const getInventoryDetails = async(req, res) => {
+  const  bodyData = await inventory.findOne({_id: req.params?.id})
+  return res.status(200).send({ message: "category retrived successfully!!!", payload: bodyData });
+}
 
 const getInventoryByCat = async (req, res) => {
   try {
@@ -74,6 +79,7 @@ module.exports = {
   getInventoryByCat,
   getInventoryByFood,
   deleteInventory,
-  updateInventory
+  updateInventory,
+  getInventoryDetails
 };
   

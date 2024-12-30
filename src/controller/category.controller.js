@@ -17,6 +17,11 @@ const getCategory = async (req, res) => {
   return res.status(200).send({ message: "category retrived successfully!!!", payload: bodyData });
 };
 
+const getCategoryDetail = async(req, res) => {
+  const  bodyData = await category.findOne({_id: req.params?.id})
+  return res.status(200).send({ message: "category retrived successfully!!!", payload: bodyData });
+}
+
 const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -42,4 +47,5 @@ module.exports = {
   getCategory,
   deleteCategory,
   updateCategory,
+  getCategoryDetail
 };
